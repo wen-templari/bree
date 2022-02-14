@@ -3,9 +3,11 @@
 
 ### Requirements
 + docker
++ npm
 
 ### How to run
 ```sh
+npm install
 docker-compose up
 ```
 
