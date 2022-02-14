@@ -1,7 +1,7 @@
 version: "3"
 services:
   mirai:
-    image: mirai:latest
+    image: reprover/mirai-http:latest
     volumes:
       - ./mirai/config:/app/config
       - ./mirai/data:/app/data
@@ -10,3 +10,15 @@ services:
       - ./mirai/plugins:/app/plugins
     ports:
       - 8080:8080
+  service:
+    image: node
+    container_name: node
+    volumes:
+      - .:/usr/local/app
+      - ./wait-for-it.sh:/usr/local/app/wait-for-it.sh
+    working_dir: /usr/local/app
+    command: >
+      /bin/bash -c '
+      chmod 777 /usr/local/app/wait-for-it.sh;
+      /usr/local/app/wait-for-it.sh mirai:8080 -t 60 -- node app.js;
+      '
