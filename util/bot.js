@@ -1,7 +1,5 @@
-const { Message, Middleware } = require("mirai-js")
-const bot = require("../bot")
-const GroupId = 996966860 // test
-
+const { Bot, Message, Middleware } = require("mirai-js")
+const { GroupList, MiraiConfig, BotAccount } = require("../config")
 const Dict = {
   pbp: "拼不拼",
   pljw: "拼了叫我",
@@ -10,10 +8,16 @@ const Dict = {
   mgj: "妈个鸡",
 }
 
-class Bot {
+class TranslateBot {
   constructor() {
-    const GroupFilter = new Middleware().groupFilter([GroupId]).textProcessor()
-    bot.on(
+    this.bot = new Bot()
+    this.bot.open({
+      baseUrl: MiraiConfig.url,
+      verifyKey: MiraiConfig.key,
+      qq: BotAccount.id,
+    })
+    const GroupFilter = new Middleware().groupFilter(GroupList).textProcessor()
+    this.bot.on(
       "GroupMessage",
       GroupFilter.done(async data => {
         console.log(data.text)
@@ -24,8 +28,8 @@ class Bot {
         }
         content = content.replace(reg, "")
         content = this.translate(content)
-        await bot.sendMessage({
-          group: GroupId,
+        await this.bot.sendMessage({
+          group: data.sender.group.id,
           message: new Message().addText(data.sender.memberName + ":\n").addText(content),
         })
         // await bot.recall({ messageId: data.messageChain[0].id })
@@ -42,23 +46,10 @@ class Bot {
   }
 
   async msgTest() {
-    await bot.sendMessage({
-      group: GroupId,
+    await this.bot.sendMessage({
+      group: 996966860,
       message: new Message().addText("Hello there!"),
     })
   }
-
-  async getGroupAnnouncement(groupId) {
-    bot.getGroupConfig({ group: groupId }).then(res => {
-      console.log(res)
-    })
-  }
-
-  async setGroupAnnouncement(groupId, content) {
-    bot.setGroupConfig({
-      group: groupId,
-      announcement: content,
-    })
-  }
 }
-module.exports = new Bot()
+module.exports = new TranslateBot()
