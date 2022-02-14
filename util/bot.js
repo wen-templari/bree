@@ -3,6 +3,7 @@ const { GroupList, MiraiConfig, BotAccount } = require("../config")
 const Dict = {
   pbp: "拼不拼",
   pljw: "拼了叫我",
+  psm: "拼什么",
   dx: "都行",
   zml: "在麦里",
   mgj: "妈个鸡",
