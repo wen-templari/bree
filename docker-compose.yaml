@@ -1,0 +1,12 @@
+version: "3"
+services:
+  mirai:
+    image: mirai:latest
+    volumes:
+      - ./mirai/config:/app/config
+      - ./mirai/data:/app/data
+      - ./mirai/logs:/app/logs
+      - ./mirai/bots:/app/bots
+      - ./mirai/plugins:/app/plugins
+    ports:
+      - 8080:8080
