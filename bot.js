@@ -1,3 +1,5 @@
+//change test
+//123123
 const { Bot, Message, Middleware } = require("mirai-js")
 const { GroupList, MiraiConfig, BotAccount } = require("config")
 const Dict = {
