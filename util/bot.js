@@ -2,10 +2,12 @@ const { Bot, Message, Middleware } = require("mirai-js")
 const { GroupList, MiraiConfig, BotAccount } = require("../config")
 const Dict = {
   pbp: "拼不拼",
+  zml: "在麦里",
+  pyq: "拼一枪",
   pljw: "拼了叫我",
   psm: "拼什么",
   dx: "都行",
-  zml: "在麦里",
+  bpl: "不拼了",
   mgj: "妈个鸡",
 }
 const options = {
