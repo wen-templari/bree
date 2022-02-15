@@ -1,1 +1,1 @@
-const bot = require("./util/bot")
+const bot = require("./bot")
