@@ -1,5 +1,5 @@
 const { Bot, Message, Middleware } = require("mirai-js")
-const { GroupList, MiraiConfig, BotAccount } = require("../config")
+const { GroupList, MiraiConfig, BotAccount } = require("config")
 const Dict = {
   pbp: "拼不拼",
   zml: "在麦里",
@@ -42,7 +42,7 @@ class TranslateBot {
           return
         }
         content = content.replace(cmdReg, "")
-        let optionReg = /-[a-z]/
+        let optionReg = /^-[a-z]/
         let arg = ""
         if (optionReg.test(content)) {
           arg = content.match(optionReg)[0]
@@ -53,7 +53,6 @@ class TranslateBot {
         //     options[option].handler(this.bot, data)
         //   }
         // }
-        console.log(arg)
         if (arg == "") {
           content = this.translate(content)
           await this.echo(group, memberName, content)
@@ -76,8 +75,16 @@ class TranslateBot {
 
   translate(str) {
     let res = str
-    for (let key in Dict) {
-      res = res.replace(new RegExp(key, "g"), Dict[key])
+    let dict = await this.getDict()
+    let sortedKeys = Object.keys(dict).sort((a,b)=>{
+      return a.length - b.length
+    })
+    let sortedDict = {}
+    for(let key of sortedKeys){
+      sortedDict[key] = dict[key]
+    }
+    for (let key in ) {
+      res = res.replace(new RegExp(key, "g"), sortedDict[key])
     }
     return res
   }
@@ -87,6 +94,10 @@ class TranslateBot {
       group: group,
       message: new Message().addText(name + ":\n").addText(content),
     })
+  }
+
+  async getDict() {
+    return Dict
   }
 
   async printDict(group) {
