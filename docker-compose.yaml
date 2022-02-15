@@ -8,11 +8,8 @@ services:
       - ./mirai/logs:/app/logs
       - ./mirai/bots:/app/bots
       - ./mirai/plugins:/app/plugins
-    ports:
-      - 8080:8080
   service:
     image: node
-    container_name: node
     volumes:
       - .:/usr/local/app
       - ./wait-for-it.sh:/usr/local/app/wait-for-it.sh
