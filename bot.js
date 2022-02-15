@@ -1,5 +1,5 @@
 const { Bot, Message, Middleware } = require("mirai-js")
-const { GroupList, MiraiConfig, BotAccount } = require("config")
+const { GroupList, MiraiConfig, BotAccount } = require("./config")
 const Dict = {
   pbp: "拼不拼",
   zml: "在麦里",
@@ -73,17 +73,17 @@ class TranslateBot {
     )
   }
 
-  translate(str) {
+  async translate(str) {
     let res = str
     let dict = await this.getDict()
-    let sortedKeys = Object.keys(dict).sort((a,b)=>{
+    let sortedKeys = Object.keys(dict).sort((a, b) => {
       return a.length - b.length
     })
     let sortedDict = {}
-    for(let key of sortedKeys){
+    for (let key of sortedKeys) {
       sortedDict[key] = dict[key]
     }
-    for (let key in ) {
+    for (let key in sortedDict) {
       res = res.replace(new RegExp(key, "g"), sortedDict[key])
     }
     return res
