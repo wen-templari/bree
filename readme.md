@@ -15,5 +15,7 @@ docker-compose up
 
 - [x] 容器化
 - [x] 分离密钥
-- [ ] -r --recall 撤回消息
-- [ ] 获取群公告
+- [x] -r --recall 撤回消息
+- [ ] 优化结构
+- [ ] 抽离 options
+- [ ] **获取群公告**
