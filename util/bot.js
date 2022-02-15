@@ -8,7 +8,18 @@ const Dict = {
   zml: "在麦里",
   mgj: "妈个鸡",
 }
-
+const options = {
+  "-r": {
+    description: "撤回上一条信息",
+    text: true,
+  },
+  "-h": {
+    description: "帮助",
+  },
+  "-d": {
+    description: "获取词典",
+  },
+}
 class TranslateBot {
   constructor() {
     this.bot = new Bot()
@@ -21,19 +32,42 @@ class TranslateBot {
     this.bot.on(
       "GroupMessage",
       GroupFilter.done(async data => {
-        console.log(data.text)
         let content = data.text
-        let reg = /^t\s/
-        if (!reg.test(content)) {
+        let group = data.sender.group.id
+        let memberName = data.sender.memberName
+        let cmdReg = /^t\s/
+        if (!cmdReg.test(content)) {
           return
         }
-        content = content.replace(reg, "")
-        content = this.translate(content)
-        await this.bot.sendMessage({
-          group: data.sender.group.id,
-          message: new Message().addText(data.sender.memberName + ":\n").addText(content),
-        })
-        // await bot.recall({ messageId: data.messageChain[0].id })
+        content = content.replace(cmdReg, "")
+        let optionReg = /-[a-z]/
+        let arg = ""
+        if (optionReg.test(content)) {
+          arg = content.match(optionReg)[0]
+          content = content.replace(optionReg, "")
+        }
+        // for (let option in options) {
+        //   if (option == arg) {
+        //     options[option].handler(this.bot, data)
+        //   }
+        // }
+        console.log(arg)
+        if (arg == "") {
+          content = this.translate(content)
+          await this.echo(group, memberName, content)
+        } else if (arg == "-h") {
+          await this.printHelp(group)
+        } else if (arg == "-d") {
+          await this.printDict(group)
+        } else if (arg == "-r") {
+          content = this.translate(content)
+          await this.echo(group, memberName, content)
+          try {
+            await this.bot.recall({ messageId: data.messageChain[0].id })
+          } catch (err) {
+            console.log(err.message)
+          }
+        }
       })
     )
   }
@@ -46,10 +80,39 @@ class TranslateBot {
     return res
   }
 
-  async msgTest() {
+  async echo(group, name, content) {
     await this.bot.sendMessage({
-      group: 996966860,
-      message: new Message().addText("Hello there!"),
+      group: group,
+      message: new Message().addText(name + ":\n").addText(content),
+    })
+  }
+
+  async printDict(group) {
+    let msg = new Message()
+    msg.addText("词典\n")
+    for (let key in Dict) {
+      msg.addText(`  ${key} ${Dict[key]}\n`)
+    }
+    await this.bot.sendMessage({
+      group: group,
+      message: msg,
+    })
+  }
+
+  async printHelp(group) {
+    let msg = new Message().addText("Usage\n")
+    msg.addText("  t <text> 转换<text>\n")
+    for (let key in options) {
+      if (options[key].text) {
+        msg.addText(`  t  ${key} <text> ${options[key].description}\n`)
+      } else {
+        msg.addText(`  t  ${key} ${options[key].description}\n`)
+      }
+    }
+    msg.addText("\n项目地址:\nhttps://github.com/wen-templari/bree")
+    await this.bot.sendMessage({
+      group: group,
+      message: msg,
     })
   }
 }
