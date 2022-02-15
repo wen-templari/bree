@@ -19,6 +19,17 @@ jobs:
           node-version: '16'
       - run: yarn
       # Deploy
+      - name: ssh pipelines
+        uses: cross-the-world/ssh-pipeline@master
+        env:
+          WELCOME: "ssh pipeline"
+        with:
+          host: ${{ secrets.REMOTE_HOST }}
+          user: ${{ secrets.REMOTE_USER }}
+          key: ${{ secrets.ACCESS_TOKEN }}
+          connect_timeout: 10s
+          script: |
+            docker-compose -f /home/ubuntu/bree/docker-compose.yaml down
       - name: ssh deploy
         uses: easingthemes/ssh-deploy@v2.2.11
         env:
@@ -37,4 +48,4 @@ jobs:
           key: ${{ secrets.ACCESS_TOKEN }}
           connect_timeout: 10s
           script: |
-            docker-compose -f /home/ubuntu/bree/docker-compose.yaml restart
+            docker-compose -f /home/ubuntu/bree/docker-compose.yaml up
