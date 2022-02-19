@@ -8,5 +8,8 @@
   "license": "ISC",
   "dependencies": {
     "mirai-js": "^2.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.18"
   }
 }
