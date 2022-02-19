@@ -19,3 +19,13 @@ docker-compose up
 - [ ] 优化结构
 - [ ] 抽离 options
 - [ ] **获取群公告**
+
+
+### command types
+
+```sh
+1. command <content>
+  npm install
+
+2 command 
+```
