@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "commander": "^9.0.0",
     "mirai-js": "^2.3.0"
   },
   "devDependencies": {
