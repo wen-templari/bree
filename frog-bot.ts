@@ -10,7 +10,8 @@ const Dict = {
   bpl: "不拼了",
   mgj: "妈个鸡",
 }
-const options = {
+
+const Options = {
   "-r": {
     description: "撤回上一条信息",
     text: true,
@@ -22,17 +23,41 @@ const options = {
     description: "获取词典",
   },
 }
-class TranslateBot {
-  bot: Bot
+interface Command {
+  name: string
+  description: string
+  options?: [
+    {
+      name: string
+      description: string
+      handler: (message: Message, bot: FrogBot) => void
+    }
+  ]
+}
+export class FrogBot extends Bot {
+  commands: Command[] | undefined
+  // commands: Command[] = [
+  //   {
+  //     name: "ts",
+  //     description: "转换",
+  //     options: [
+  //       {
+  //         name: "-r",
+  //         description: "撤回上一条信息",
+  //         handler: (message: Message, bot: FrogBot) => {
+
+  //   }
+  // ]
   constructor() {
-    this.bot = new Bot()
-    this.bot.open({
+    super()
+    // this.bot = new Bot()
+    this.open({
       baseUrl: MiraiConfig.url,
       verifyKey: MiraiConfig.key,
       qq: BotAccount.id,
     })
     const GroupFilter = new Middleware().groupFilter(GroupList, true).textProcessor()
-    this.bot.on(
+    this.on(
       "GroupMessage",
       GroupFilter.done(async data => {
         let content = data.text
@@ -55,7 +80,7 @@ class TranslateBot {
         //   }
         // }
         if (arg == "") {
-          content = this.translate(content)
+          content = await this.translate(content)
           await this.echo(group, memberName, content)
         } else if (arg == "-h") {
           await this.printHelp(group)
@@ -65,16 +90,16 @@ class TranslateBot {
           content = this.translate(content)
           await this.echo(group, memberName, content)
           try {
-            await this.bot.recall({ messageId: data.messageChain[0].id })
+            await this.recall({ messageId: data.messageChain[0].id })
           } catch (err) {
-            console.log(err.message)
+            console.log(err)
           }
         }
       })
     )
   }
 
-  async translate(str) {
+  async translate(str: string) {
     let res = str
     let dict = await this.getDict()
     let sortedKeys = Object.keys(dict).sort((a, b) => {
@@ -90,44 +115,47 @@ class TranslateBot {
     return res
   }
 
-  async echo(group, name, content) {
-    await this.bot.sendMessage({
-      group: group,
-      message: new Message().addText(name + ":\n").addText(content),
-    })
+  async echo(group: number, name: string, content: string) {
+    try {
+      await this.sendMessage({
+        group: group,
+        message: new Message().addText(name + ":\n").addText(content),
+      })
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   async getDict() {
     return Dict
   }
 
-  async printDict(group) {
+  async printDict(group: any) {
     let msg = new Message()
     msg.addText("词典\n")
     for (let key in Dict) {
       msg.addText(`  ${key} ${Dict[key]}\n`)
     }
-    await this.bot.sendMessage({
+    await this.sendMessage({
       group: group,
       message: msg,
     })
   }
 
-  async printHelp(group) {
+  async printHelp(group: number) {
     let msg = new Message().addText("Usage\n")
     msg.addText("  t <text> 转换<text>\n")
-    for (let key in options) {
-      if (options[key].text) {
-        msg.addText(`  t  ${key} <text> ${options[key].description}\n`)
+    for (let key in Options) {
+      if (Options[key].text) {
+        msg.addText(`  t  ${key} <text> ${Options[key].description}\n`)
       } else {
-        msg.addText(`  t  ${key} ${options[key].description}\n`)
+        msg.addText(`  t  ${key} ${Options[key].description}\n`)
       }
     }
     msg.addText("\n项目地址:\nhttps://github.com/wen-templari/bree")
-    await this.bot.sendMessage({
+    await this.sendMessage({
       group: group,
       message: msg,
     })
   }
 }
-module.exports = new TranslateBot()
