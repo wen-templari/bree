@@ -7,4 +7,4 @@ const BotAccount = {
   id: 1708390042,
 }
 
-export = { GroupList, MiraiConfig, BotAccount }
+export { GroupList, MiraiConfig, BotAccount }
