@@ -1,5 +1,5 @@
-import { FrogBot } from "./frog-bot"
+import { bot } from "./frog-bot"
 
-const bot = new FrogBot()
+const frogBot = bot
 
 console.log("stating bot")
