@@ -2,5 +2,4 @@ node_modules
 dist
 logs
 cache
-AutoLogin.yaml
-config.js
+test
