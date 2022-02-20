@@ -23,34 +23,20 @@ const Options = {
     description: "获取词典",
   },
 }
-interface Command {
-  name: string
-  description: string
-  options?: [
-    {
-      name: string
-      description: string
-      handler: (message: Message, bot: FrogBot) => void
-    }
-  ]
-}
+// interface Command {
+//   name: string
+//   description: string
+//   options?: [
+//     {
+//       name: string
+//       description: string
+//       handler: (message: Message, bot: FrogBot) => void
+//     }
+//   ]
+// }
 export class FrogBot extends Bot {
-  commands: Command[] | undefined
-  // commands: Command[] = [
-  //   {
-  //     name: "ts",
-  //     description: "转换",
-  //     options: [
-  //       {
-  //         name: "-r",
-  //         description: "撤回上一条信息",
-  //         handler: (message: Message, bot: FrogBot) => {
-
-  //   }
-  // ]
   constructor() {
     super()
-    // this.bot = new Bot()
     this.open({
       baseUrl: MiraiConfig.url,
       verifyKey: MiraiConfig.key,
@@ -60,41 +46,44 @@ export class FrogBot extends Bot {
     this.on(
       "GroupMessage",
       GroupFilter.done(async data => {
-        let content = data.text
+        let content: string = data.text
         let group = data.sender.group.id
         let memberName = data.sender.memberName
-        let cmdReg = /^t\s/
+        let cmdReg = /^\w{1,6}(\s|$)/
         if (!cmdReg.test(content)) {
           return
         }
-        content = content.replace(cmdReg, "")
-        let optionReg = /^-[a-z]/
-        let arg = ""
-        if (optionReg.test(content)) {
-          arg = content.match(optionReg)[0]
-          content = content.replace(optionReg, "")
-        }
+        let args = content.split(" ")
+        console.log(args[0])
+        
+        // content = content.replace(cmdReg, "")
+        // let optionReg = /^-[a-z]/
+        // let arg = ""
+        // if (optionReg.test(content)) {
+        //   arg = content.match(optionReg)[0]
+        //   content = content.replace(optionReg, "")
+        // }
         // for (let option in options) {
         //   if (option == arg) {
         //     options[option].handler(this.bot, data)
         //   }
         // }
-        if (arg == "") {
-          content = await this.translate(content)
-          await this.echo(group, memberName, content)
-        } else if (arg == "-h") {
-          await this.printHelp(group)
-        } else if (arg == "-d") {
-          await this.printDict(group)
-        } else if (arg == "-r") {
-          content = this.translate(content)
-          await this.echo(group, memberName, content)
-          try {
-            await this.recall({ messageId: data.messageChain[0].id })
-          } catch (err) {
-            console.log(err)
-          }
-        }
+        // if (arg == "") {
+        //   content = await this.translate(content)
+        //   await this.echo(group, memberName, content)
+        // } else if (arg == "-h") {
+        //   await this.printHelp(group)
+        // } else if (arg == "-d") {
+        //   await this.printDict(group)
+        // } else if (arg == "-r") {
+        //   content = this.translate(content)
+        //   await this.echo(group, memberName, content)
+        //   try {
+        //     await this.recall({ messageId: data.messageChain[0].id })
+        //   } catch (err) {
+        //     console.log(err)
+        //   }
+        // }
       })
     )
   }
