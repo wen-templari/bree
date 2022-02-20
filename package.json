@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "start:dev": "ts-node app.ts",
-    "start:prod": "node dist/app.js"
+    "start:dev": "ts-node ./src/app.ts",
+    "start:prod": "tsc && cd dist && node src/app.js"
   },
   "main": "app.js",
   "keywords": [],
@@ -15,6 +15,7 @@
     "mirai-js": "^2.3.0"
   },
   "devDependencies": {
+    "typescript": "^4.5.5",
     "@types/node": "^17.0.18"
   }
 }
