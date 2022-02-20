@@ -1,5 +1,5 @@
 ## Bree
-> A nodejs QQ bot using Mirai-Http
+> A nodejs QQ bot using Mirai-Http and Commander-js
 
 ### Requirements
 + docker
@@ -16,6 +16,7 @@ docker-compose up
 - [x] 容器化
 - [x] 分离密钥
 - [x] -r --recall 撤回消息
-- [ ] 优化结构
-- [ ] 抽离 options
+- [x] 优化结构
 - [ ] **获取群公告**
+
+
