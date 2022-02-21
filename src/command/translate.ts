@@ -18,17 +18,14 @@ export default class Translate extends BaseCommand implements Command {
   }
 
   setProgram() {
-    let group = this.message.sender.group.id
-    this.program = programFactory(group)
-    let memberName = this.message.sender.memberName
+    this.program = programFactory(this.bot, this.message)
     try {
       this.program
         .argument("<key>")
         .option("-r, --recall", "recall last message")
         .action(async (key, options) => {
-          console.log(key)
           let res = await this.translate(key)
-          await this.bot.echo(group, memberName, res)
+          await this.bot.reply(this.message, res)
           if (options.recall) {
             try {
               await this.bot.recall({ messageId: this.message.messageChain[0].id })
@@ -41,14 +38,16 @@ export default class Translate extends BaseCommand implements Command {
         .command("dict")
         .description("print dictionary")
         .action(async (key, options) => {
-          this.printDict(group)
+          let dict = await this.getDict()
+          let formattedDict = this.formatDict(dict)
+          await this.bot.reply(this.message, formattedDict)
         })
       this.program
         .command("rand")
         .description("print random key")
         .action(async (key, options) => {
           let res = await this.getRandomKey()
-          await this.bot.echo(group, memberName, res)
+          await this.bot.reply(this.message, res)
         })
     } catch (error) {
       console.log(error)
@@ -71,17 +70,13 @@ export default class Translate extends BaseCommand implements Command {
     return res
   }
 
-  async printDict(group: any) {
-    let msg = new Message()
-    let Dict = await this.getDict()
-    msg.addText("词典\n")
-    for (let key in Dict) {
-      msg.addText(`  ${key} ${Dict[key]}\n`)
+  formatDict(dict: any) {
+    // let msg = new Message()
+    let msg = "词典\n"
+    for (let key in dict) {
+      msg += `  ${key} ${dict[key]}\n`
     }
-    await this.bot.sendMessage({
-      group: group,
-      message: msg,
-    })
+    return msg
   }
 
   async getRandomKey() {
