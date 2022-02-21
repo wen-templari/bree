@@ -1,20 +1,17 @@
 import commander from "commander"
 import { Message } from "mirai-js"
-import { bot } from "../frog-bot"
+import { FrogBot } from "../frog-bot"
 
-export default function (group: number) {
+export default function (bot: FrogBot, message: any) {
   let program = new commander.Command()
   program.exitOverride()
   program.configureOutput({
     writeOut: str => {
-      console.log(str)
-      bot.sendMessage({
-        group: group,
-        message: new Message().addText(str),
-      })
+      bot.reply(message, str)
       return str
     },
     writeErr: str => {
+      bot.reply(message, str)
       return str
     },
   })
