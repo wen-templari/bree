@@ -52,6 +52,13 @@ export class FrogBot extends Bot {
       })
     })
   }
+  async reply(message: any, content: string) {
+    await this.sendMessage({
+      group: message.sender.group.id,
+      quote: message.messageChain[0].id,
+      message: new Message().addText(content),
+    })
+  }
 
   async echo(group: number, name: string, content: string) {
     console.log(`${name}: ${content}`)

@@ -9,19 +9,30 @@
 // })
 // const translate = import("/Users/clas/projects/bree/src/command/translate").then(m => m.default)
 
-const { Command } = require("commander") // include commander in git clone of commander repo
-const program = new Command()
+function formatDict(dict: any) {
+  // let msg = new Message()
+  let msg = "词典\n"
+  for (let key in dict) {
+    msg += `  ${key} ${dict[key]}\n`
+  }
+  return msg
+}
 
-program
-  .version("0.1.0")
-  .argument("<username>", "user to login")
-  .option("-p, --password <password>", "password to login")
-  .description("example program for argument")
-  .action((username: any) => {
-    console.log("username:", username)
-  })
-program.command("dict").action((key: any, options: any) => {
-  console.log("dict")
-})
-console.log(process.argv)
-program.parse(['node','test','user'])
+// console.log(
+//   formatDict({
+//     a: "b",
+//     c: "d",
+//   })
+// )
+
+// const parsedValue = parseInt(value, 10);
+// if (isNaN(parsedValue)) {
+//   throw new commander.InvalidArgumentError('Not a number.');
+// }
+
+const roll = (upper: number, lower: number) => {
+  return Math.floor(Math.random() * (upper - lower + 1) + lower)
+}
+for (let i = 0; i < 10; i++) {
+  console.log(roll(20, 10).toString())
+}
