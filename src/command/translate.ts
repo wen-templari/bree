@@ -1,4 +1,3 @@
-import { Message } from "mirai-js"
 import commander from "commander"
 import { FrogBot } from "../frog-bot"
 import { Command, BaseCommand } from "./command"
@@ -18,7 +17,6 @@ export default class Translate extends BaseCommand implements Command {
   }
 
   setProgram() {
-    this.program = programFactory(this.bot, this.message)
     try {
       this.program
         .argument("<key>")

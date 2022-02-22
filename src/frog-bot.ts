@@ -18,8 +18,6 @@ export class FrogBot extends Bot {
         "GroupMessage",
         GroupFilter.done(async data => {
           let content: string = data.text
-          let group = data.sender.group.id
-          let memberName = data.sender.memberName
           let cmdReg = /^\w{1,6}(\s|$)/
           if (!cmdReg.test(content)) {
             return
@@ -57,6 +55,14 @@ export class FrogBot extends Bot {
       group: message.sender.group.id,
       quote: message.messageChain[0].id,
       message: new Message().addText(content),
+    })
+  }
+
+  async replyCustom(message: any, customMessage: Message) {
+    await this.sendMessage({
+      group: message.sender.group.id,
+      quote: message.messageChain[0].id,
+      message: customMessage,
     })
   }
 

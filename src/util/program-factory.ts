@@ -1,5 +1,4 @@
 import commander from "commander"
-import { Message } from "mirai-js"
 import { FrogBot } from "../frog-bot"
 
 export default function (bot: FrogBot, message: any) {

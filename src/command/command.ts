@@ -15,11 +15,11 @@ export class BaseCommand implements Command {
   name!: string
   program!: commander.Command
   message: any
-  // constructor() {
-  //   console.log(this.name + " loaded")
-  // }
+  constructor() {}
+
   handler(message: any, args: string[]) {
     this.message = message
+    this.resetProgram()
     this.setProgram()
     try {
       let contactedArgs = ["node", this.name, ...args]
@@ -29,6 +29,27 @@ export class BaseCommand implements Command {
       console.log(error)
     }
   }
+
+  programFactory() {
+    let program = new commander.Command()
+    program.exitOverride()
+    program.configureOutput({
+      writeOut: str => {
+        this.bot.reply(this.message, str)
+        return str
+      },
+      writeErr: str => {
+        this.bot.reply(this.message, str)
+        return str
+      },
+    })
+    return program
+  }
+
+  resetProgram() {
+    this.program = this.programFactory()
+  }
+
   setProgram(): void {
     throw new Error("Method not implemented.")
   }
