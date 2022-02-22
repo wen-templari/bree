@@ -12,7 +12,8 @@
   "license": "ISC",
   "dependencies": {
     "commander": "^9.0.0",
-    "mirai-js": "^2.3.0"
+    "mirai-js": "^2.3.0",
+    "redis": "^4.0.4"
   },
   "devDependencies": {
     "@types/mocha": "^9.1.0",
