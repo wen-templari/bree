@@ -19,3 +19,5 @@ services:
       chmod 777 /usr/local/app/wait-for-it.sh;
       /usr/local/app/wait-for-it.sh mirai:8080 -t 60 -- npm run start:prod;
       '
+  redis:
+    image: redis

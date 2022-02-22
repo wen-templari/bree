@@ -30,9 +30,39 @@ function formatDict(dict: any) {
 //   throw new commander.InvalidArgumentError('Not a number.');
 // }
 
-const roll = (upper: number, lower: number) => {
-  return Math.floor(Math.random() * (upper - lower + 1) + lower)
+import { createClient } from "redis"
+
+const getClient = async () => {
+  const client = createClient()
+
+  client.on("error", err => console.log("Redis Client Error", err))
+
+  await client.connect()
+  return client
 }
-for (let i = 0; i < 10; i++) {
-  console.log(roll(20, 10).toString())
+// const client = await getClient()
+
+const addPLJW = async (client: any, id: number, group: number) => {
+  let key = `pljw:${group}:${id}`
+  client.hSet(key, "id", id)
+  client.sendCommand(["EXPIRE", key, "3600"])
+  getPLJW(client, group)
 }
+
+const test = async () => {
+  const client = await getClient()
+  await addPLJW(client, 1, 2)
+}
+test()
+
+const getPLJW = async (client: any, group: any) => {
+  // let keys = await client.sendCommand(["keys", `pljw:${group}:*`])
+  let keys = await client.keys("pljw:1:*")
+  let res = []
+  for (let key of keys) {
+    // let id = await client.hGetAll(key)
+    let id = await client.sendCommand(["HGET", key, "id"])
+    res.push(parseInt(id))
+  }
+}
+// getPLJW
