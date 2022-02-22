@@ -17,7 +17,6 @@ export default class Roll extends BaseCommand implements Command {
   }
 
   setProgram() {
-    this.program = programFactory(this.bot, this.message)
     try {
       this.program
         .argument("<upper>")
