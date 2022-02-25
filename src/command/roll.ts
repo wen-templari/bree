@@ -1,7 +1,6 @@
 import { FrogBot } from "../frog-bot"
 import commander from "commander"
 import { BaseCommand, Command } from "./command"
-import programFactory from "../util/program-factory"
 
 export default class Roll extends BaseCommand implements Command {
   bot: FrogBot
@@ -12,7 +11,6 @@ export default class Roll extends BaseCommand implements Command {
   constructor(bot: FrogBot) {
     super()
     this.bot = bot
-    // TODO
     this.program = new commander.Command()
   }
 
@@ -21,14 +19,7 @@ export default class Roll extends BaseCommand implements Command {
       this.program
         .argument("<upper>")
         .argument("[lower]")
-        // .option("-a", "--array <items...>", "roll item")
         .action(async (upper, lower, options) => {
-          // if (options.array) {
-          //   console.log(options.array)
-          //   let res = await this.rollArray(options.array)
-          //   await this.bot.reply(this.message, res)
-          //   return
-          // }
           if (lower === undefined) {
             lower = 1
           }

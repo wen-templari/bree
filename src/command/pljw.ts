@@ -12,7 +12,6 @@ export default class PLJW extends BaseCommand implements Command {
   constructor(bot: FrogBot) {
     super()
     this.bot = bot
-    // TODO
     this.program = new commander.Command()
   }
 
