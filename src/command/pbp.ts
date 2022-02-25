@@ -13,7 +13,6 @@ export default class PBP extends BaseCommand implements Command {
   constructor(bot: FrogBot) {
     super()
     this.bot = bot
-    // TODO
     this.program = new commander.Command()
   }
 
@@ -24,9 +23,7 @@ export default class PBP extends BaseCommand implements Command {
       this.program.description("@ those who want to pyq").action(async (key, options) => {
         let atList = await this.getPLJW(client, group, senderId)
         let msg = new Message()
-        for (let at of atList) {
-          msg.addAt(at)
-        }
+        atList.forEach(id => msg.addAt(id))
         this.bot.replyCustom(this.message, msg)
       })
     } catch (error) {

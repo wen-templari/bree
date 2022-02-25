@@ -20,10 +20,8 @@ export class BaseCommand implements Command {
   handler(message: any, args: string[]) {
     this.message = message
     this.resetProgram()
-    this.setProgram()
     try {
       let contactedArgs = ["node", this.name, ...args]
-      console.log(contactedArgs)
       this.program.parse(contactedArgs)
     } catch (error) {
       console.log(error)
@@ -48,6 +46,7 @@ export class BaseCommand implements Command {
 
   resetProgram() {
     this.program = this.programFactory()
+    this.setProgram()
   }
 
   setProgram(): void {
