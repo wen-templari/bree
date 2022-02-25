@@ -1,7 +1,6 @@
 import commander from "commander"
 import { FrogBot } from "../frog-bot"
 import { Command, BaseCommand } from "./command"
-import programFactory from "../util/program-factory"
 
 export default class Translate extends BaseCommand implements Command {
   bot: FrogBot
@@ -12,7 +11,6 @@ export default class Translate extends BaseCommand implements Command {
   constructor(bot: FrogBot) {
     super()
     this.bot = bot
-    // TODO
     this.program = new commander.Command()
   }
 
