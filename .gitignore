@@ -4,4 +4,4 @@ logs
 cache
 test
 src/test.ts
-config
+config.ts
