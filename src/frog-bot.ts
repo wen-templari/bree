@@ -1,5 +1,5 @@
 import { Bot, Message, Middleware } from "mirai-js"
-import { GroupList, MiraiConfig, BotAccount } from "./config"
+import { GroupList, MiraiConfig, BotAccount } from "../config"
 import fs from "fs"
 import { Command } from "./command/command"
 

@@ -3,3 +3,4 @@ dist
 logs
 cache
 test
+src/test.ts
